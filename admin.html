@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Menü Editörü</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin">
+  <header class="admin-header">
+    <h1>Menü Editörü</h1>
+    <div class="admin-actions" id="topActions" hidden>
+      <button id="reloadBtn" class="btn btn-ghost btn-sm" type="button">Yeniden Yükle</button>
+      <button id="saveBtn" class="btn btn-ghost btn-sm" type="button">Kaydet</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <!-- Bağlantı paneli -->
+    <section class="panel" id="connPanel">
+      <h2>GitHub Bağlantısı</h2>
+      <div class="field-row">
+        <div class="field">
+          <label for="ownerInput">Kullanıcı/Org (owner)</label>
+          <input id="ownerInput" class="input" type="text" autocomplete="off" placeholder="ör. kullaniciadi">
+        </div>
+        <div class="field">
+          <label for="repoInput">Depo (repo)</label>
+          <input id="repoInput" class="input" type="text" autocomplete="off" placeholder="ör. qr-menu">
+        </div>
+      </div>
+      <div class="field">
+        <label for="branchInput">Dal (branch)</label>
+        <input id="branchInput" class="input" type="text" autocomplete="off" placeholder="main" value="main">
+      </div>
+      <div class="field">
+        <label for="tokenInput">Fine-grained Personal Access Token</label>
+        <input id="tokenInput" class="input" type="password" autocomplete="off" placeholder="github_pat_…">
+      </div>
+      <label style="display:flex; gap:8px; align-items:center; font-size:.85rem; color:var(--muted); margin-bottom:12px;">
+        <input id="rememberToken" type="checkbox" checked>
+        Token'ı bu cihazda hatırla
+      </label>
+      <button id="loadBtn" class="btn btn-primary btn-block" type="button">Menüyü Yükle</button>
+      <p class="conn-status info" id="connStatus" role="status" aria-live="polite"></p>
+      <p class="warn">
+        Token yalnızca bu cihaz/tarayıcıda yerel olarak saklanır, kimseyle paylaşma.
+        Gerekli izin: <strong>yalnızca bu repo · Contents: Read and write</strong>.
+      </p>
+    </section>
+
+    <!-- Editör -->
+    <section id="editor" hidden>
+      <div class="panel restaurant-row">
+        <h2>Genel</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="restNameInput">Kafe Adı</label>
+            <input id="restNameInput" class="input" type="text">
+          </div>
+          <div class="field" style="flex:0 0 120px;">
+            <label for="currencyInput">Para Birimi</label>
+            <input id="currencyInput" class="input" type="text" placeholder="TL">
+          </div>
+        </div>
+      </div>
+
+      <div id="cats"></div>
+
+      <div class="editor-foot">
+        <button id="addCatBtn" class="btn btn-outline btn-block" type="button">+ Kategori Ekle</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

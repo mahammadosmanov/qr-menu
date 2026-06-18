@@ -1,0 +1,91 @@
+{
+  "restaurant": {
+    "name": "Kafe Adı",
+    "currency": "TL",
+    "note": "restaurant.name alanını kendi kafe adınla değiştir."
+  },
+  "categories": [
+    {
+      "id": "kahvaltilar",
+      "name": "Kahvaltılar",
+      "icon": "🍳",
+      "items": [
+        { "id": "serpme-kahvalti", "name": "Serpme Kahvaltı", "price": 650, "note": "Kişi Başı", "image": null, "available": true },
+        { "id": "kahvalti-tabagi", "name": "Kahvaltı Tabağı", "price": 350, "note": "", "image": null, "available": true },
+        { "id": "menemen", "name": "Menemen", "price": 225, "note": "", "image": null, "available": true },
+        { "id": "kasarli-menemen", "name": "Kaşarlı Menemen", "price": 250, "note": "", "image": null, "available": true },
+        { "id": "sucuklu-yumurta", "name": "Sucuklu Yumurta", "price": 250, "note": "", "image": null, "available": true },
+        { "id": "sahanda-yumurta", "name": "Sahanda Yumurta", "price": 200, "note": "", "image": null, "available": true },
+        { "id": "omlet", "name": "Omlet", "price": 200, "note": "", "image": null, "available": true },
+        { "id": "peynirli-omlet", "name": "Peynirli Omlet", "price": 225, "note": "", "image": null, "available": true },
+        { "id": "karisik-omlet", "name": "Karışık Omlet", "price": 250, "note": "", "image": null, "available": true },
+        { "id": "gozleme-peynirli", "name": "Gözleme (Peynirli)", "price": 150, "note": "", "image": null, "available": true },
+        { "id": "gozleme-patatesli", "name": "Gözleme (Patatesli)", "price": 150, "note": "", "image": null, "available": true }
+      ]
+    },
+    {
+      "id": "fast-food",
+      "name": "Fast Food",
+      "icon": "🍔",
+      "items": [
+        { "id": "hamburger", "name": "Hamburger", "price": 350, "note": "", "image": null, "available": true },
+        { "id": "patates-kizartmasi", "name": "Patates Kızartması", "price": 250, "note": "", "image": null, "available": true },
+        { "id": "sogan-halkasi", "name": "Soğan Halkası", "price": 200, "note": "", "image": null, "available": true },
+        { "id": "tavuk-nugget", "name": "Tavuk Nugget", "price": 200, "note": "", "image": null, "available": true },
+        { "id": "sigara-boregi", "name": "Sigara Böreği", "price": 250, "note": "", "image": null, "available": true },
+        { "id": "patates-sosis-tabagi", "name": "Patates Sosis Tabağı", "price": 300, "note": "", "image": null, "available": true },
+        { "id": "bazlama-tost", "name": "Bazlama Tost", "price": 350, "note": "", "image": null, "available": true },
+        { "id": "tost", "name": "Tost", "price": 250, "note": "", "image": null, "available": true }
+      ]
+    },
+    {
+      "id": "sicak-icecekler",
+      "name": "Sıcak İçecekler",
+      "icon": "☕",
+      "items": [
+        { "id": "turk-kahvesi", "name": "Türk Kahvesi", "price": 125, "note": "", "image": null, "available": true },
+        { "id": "filtre-kahve", "name": "Filtre Kahve", "price": 150, "note": "", "image": null, "available": true },
+        { "id": "espresso", "name": "Espresso", "price": 120, "note": "", "image": null, "available": true },
+        { "id": "americano", "name": "Americano", "price": 150, "note": "", "image": null, "available": true },
+        { "id": "cappuccino", "name": "Cappuccino", "price": 160, "note": "", "image": null, "available": true },
+        { "id": "mocha", "name": "Mocha", "price": 170, "note": "", "image": null, "available": true },
+        { "id": "double-espresso", "name": "Double Espresso", "price": 150, "note": "", "image": null, "available": true },
+        { "id": "latte", "name": "Latte", "price": 160, "note": "", "image": null, "available": true },
+        { "id": "cay", "name": "Çay", "price": 40, "note": "", "image": null, "available": true },
+        { "id": "bitki-caylari", "name": "Bitki Çayları", "price": 150, "note": "", "image": null, "available": true }
+      ]
+    },
+    {
+      "id": "soguk-icecekler",
+      "name": "Soğuk İçecekler",
+      "icon": "🥤",
+      "items": [
+        { "id": "su", "name": "Su", "price": 25, "note": "", "image": null, "available": true },
+        { "id": "sade-soda", "name": "Sade Soda", "price": 40, "note": "", "image": null, "available": true },
+        { "id": "kola", "name": "Kola", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "fanta", "name": "Fanta", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "sprite", "name": "Sprite", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "meyve-suyu", "name": "Meyve Suyu", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "ice-americano", "name": "Ice Americano", "price": 180, "note": "", "image": null, "available": true },
+        { "id": "ice-mocha", "name": "Ice Mocha", "price": 180, "note": "", "image": null, "available": true },
+        { "id": "ice-latte", "name": "Ice Latte", "price": 180, "note": "", "image": null, "available": true },
+        { "id": "fuse-tea-seftali", "name": "Fuse Tea Şeftali", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "fuse-tea-limon", "name": "Fuse Tea Limon", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "fuse-tea-mango-ananas", "name": "Fuse Tea Mango-Ananas", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "fuse-tea-karpuz", "name": "Fuse Tea Karpuz", "price": 90, "note": "", "image": null, "available": true },
+        { "id": "limonata", "name": "Limonata", "price": 150, "note": "", "image": null, "available": true }
+      ]
+    },
+    {
+      "id": "milkshake",
+      "name": "Milkshake",
+      "icon": "🥛",
+      "items": [
+        { "id": "cilekli-milkshake", "name": "Çilekli Milkshake", "price": 190, "note": "", "image": null, "available": true },
+        { "id": "cikolatali-milkshake", "name": "Çikolatalı Milkshake", "price": 190, "note": "", "image": null, "available": true },
+        { "id": "muzlu-milkshake", "name": "Muzlu Milkshake", "price": 190, "note": "", "image": null, "available": true },
+        { "id": "oreo-milkshake", "name": "Oreo Milkshake", "price": 190, "note": "", "image": null, "available": true }
+      ]
+    }
+  ]
+}
