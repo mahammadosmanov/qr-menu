@@ -3,32 +3,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#F97316">
-  <meta name="description" content="Dijital menü">
-  <title>Menü</title>
+  <meta name="theme-color" content="#E8732A">
+  <meta name="description" content="Ada Cafe dijital menü">
+  <title>Ada Cafe — Menü</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo-box" id="logoBox" hidden></div>
-      <h1 class="site-title" id="siteTitle">Menü</h1>
+  <!-- Sabit sulu boya çiçek çerçevesi (bg-phone / bg-hd CSS'te seçilir) -->
+  <div class="bg-frame" aria-hidden="true"></div>
+
+  <div class="app">
+    <header class="site-header">
+      <h1 class="brand" id="siteTitle">Ada Cafe</h1>
+      <p class="tagline" id="tagline"><span class="leaf">🌿</span>Lezzet, huzur, keyif<span class="leaf">🌿</span></p>
+    </header>
+
+    <div class="menu-divider" aria-hidden="true">
+      <span class="leaf">🌿</span>
+      <span class="menu-word">MENÜ</span>
+      <span class="leaf">🌿</span>
     </div>
-  </header>
 
-  <nav class="cat-nav" id="catNavWrap" aria-label="Menü kategorileri" hidden>
-    <div class="cat-nav-inner" id="catNav"></div>
-  </nav>
+    <div class="menu-body">
+      <nav class="cat-rail" id="catNav" aria-label="Menü kategorileri"></nav>
+      <main class="menu-content" id="menuRoot">
+        <p class="loading" id="loading" role="status" aria-live="polite">Menü yükleniyor…</p>
+      </main>
+    </div>
 
-  <main class="menu" id="menuRoot">
-    <p class="loading" id="loading" role="status" aria-live="polite">Menü yükleniyor…</p>
-  </main>
+    <div class="state-msg" id="errorState" role="status" aria-live="polite" hidden></div>
 
-  <div class="state-msg" id="errorState" role="status" aria-live="polite" hidden></div>
-
-  <footer class="site-footer">
-    <p id="footerNote"></p>
-  </footer>
+    <footer class="site-footer">
+      <p id="footerNote"></p>
+    </footer>
+  </div>
 
   <!--
     Çevrimdışı önyükleme (bootstrap) kopyası.
@@ -39,7 +47,7 @@
   -->
   <script type="application/json" id="menu-data">
 {
-  "restaurant": { "name": "Kafe Adı", "currency": "TL" },
+  "restaurant": { "name": "Ada Cafe", "currency": "TL", "tagline": "Lezzet, huzur, keyif" },
   "categories": [
     {
       "id": "kahvaltilar", "name": "Kahvaltılar", "icon": "🍳",

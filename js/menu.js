@@ -1,12 +1,11 @@
 // ============================================================
-// QR Menü — müşteri tarafı render mantığı
-// Bağımlılık yok, build yok. Sadece menu.json'ı okur.
+// Ada Cafe — müşteri tarafı render mantığı
+// Bağımlılık yok, build yok. menu.json'ı okur (offline bootstrap ile).
 // ============================================================
 
 const els = {
   title: document.getElementById('siteTitle'),
-  logoBox: document.getElementById('logoBox'),
-  navWrap: document.getElementById('catNavWrap'),
+  tagline: document.getElementById('tagline'),
   nav: document.getElementById('catNav'),
   root: document.getElementById('menuRoot'),
   loading: document.getElementById('loading'),
@@ -18,24 +17,24 @@ const els = {
 let activeObserver = null;
 let activeOnScroll = null;
 
-// Fiyatı "650 TL" biçiminde göster (Türkçe binlik ayracı ile).
+// Fiyatı biçimle: TL/₺ için "₺650", diğer birimlerde "650 USD".
 function formatPrice(price, currency) {
   const num = Number(price);
   const shown = Number.isFinite(num) ? num.toLocaleString('tr-TR') : price;
-  return `${shown} ${currency}`.trim();
+  const cur = (currency || '').trim();
+  if (cur === 'TL' || cur === '₺' || cur === 'TRY') return `₺${shown}`;
+  return `${shown} ${cur}`.trim();
 }
 
-// Yükleme/hata durumlarını temizle.
 function clearStatus() {
   if (els.loading) els.loading.remove();
   els.error.hidden = true;
 }
 
-// Nazik hata ekranı.
 function showError(message, { retry = false } = {}) {
   if (els.loading) els.loading.remove();
   els.root.innerHTML = '';
-  els.navWrap.hidden = true;
+  els.nav.innerHTML = '';
   els.error.hidden = false;
   els.error.innerHTML = '';
 
@@ -56,62 +55,76 @@ function showError(message, { retry = false } = {}) {
   }
 }
 
-// Tek ürün kartı oluştur (DOM ile — Türkçe/özel karakter güvenli).
-function buildCard(item, currency) {
+// Ürün kartı: solda görsel (yoksa kategori emojili tile), sağda ad/not/fiyat.
+function buildCard(item, currency, catIcon) {
   const card = document.createElement('article');
   card.className = 'item-card';
 
-  // Görsel sadece doluysa; boşsa placeholder gösterme.
+  const thumb = document.createElement('div');
+  thumb.className = 'item-thumb';
   if (item.image) {
     const img = document.createElement('img');
-    img.className = 'item-thumb';
     img.src = item.image;
     img.alt = item.name || '';
     img.loading = 'lazy';
     img.decoding = 'async';
-    // Görsel yüklenemezse kartı metinli kompakt biçime düşür.
-    img.addEventListener('error', () => img.remove());
-    card.appendChild(img);
+    // Görsel yüklenemezse emoji placeholder'a düş.
+    img.addEventListener('error', () => {
+      img.remove();
+      const ph = document.createElement('span');
+      ph.className = 'ph';
+      ph.textContent = catIcon || '🍽️';
+      thumb.appendChild(ph);
+    });
+    thumb.appendChild(img);
+  } else {
+    const ph = document.createElement('span');
+    ph.className = 'ph';
+    ph.textContent = catIcon || '🍽️';
+    thumb.appendChild(ph);
   }
 
-  const main = document.createElement('div');
-  main.className = 'item-main';
-
-  const textWrap = document.createElement('div');
-  textWrap.className = 'item-text';
+  const info = document.createElement('div');
+  info.className = 'item-info';
 
   const name = document.createElement('h3');
   name.className = 'item-name';
   name.textContent = item.name || '';
-  textWrap.appendChild(name);
+  info.appendChild(name);
 
   if (item.note) {
     const note = document.createElement('p');
     note.className = 'item-note';
     note.textContent = item.note;
-    textWrap.appendChild(note);
+    info.appendChild(note);
   }
 
   const price = document.createElement('span');
-  price.className = 'price-badge';
+  price.className = 'price';
   price.textContent = formatPrice(item.price, currency);
+  info.appendChild(price);
 
-  main.append(textWrap, price);
-  card.appendChild(main);
+  card.append(thumb, info);
   return card;
 }
 
-// Tüm menüyü çiz.
 function render(data) {
   const restaurant = data.restaurant || {};
   const currency = restaurant.currency || '';
   const name = restaurant.name || 'Menü';
 
   els.title.textContent = name;
-  document.title = name;
+  document.title = `${name} — Menü`;
+
+  if (restaurant.tagline) {
+    els.tagline.innerHTML = '';
+    const leaf1 = document.createElement('span'); leaf1.className = 'leaf'; leaf1.textContent = '🌿';
+    const leaf2 = leaf1.cloneNode(true);
+    els.tagline.append(leaf1, document.createTextNode(restaurant.tagline), leaf2);
+  }
 
   const categories = Array.isArray(data.categories) ? data.categories : [];
-  // available:false ürünleri müşteri menüsünde gizle.
+  // available:false ürünleri müşteri menüsünde gizle; boş kategoriyi atla.
   const visibleCats = categories
     .map((c) => ({ ...c, items: (c.items || []).filter((i) => i.available !== false) }))
     .filter((c) => c.items.length > 0);
@@ -130,70 +143,56 @@ function render(data) {
   visibleCats.forEach((cat) => {
     const secId = `cat-${cat.id}`;
 
-    // Sticky nav sekmesi
+    // Sol dikey şerit öğesi
     const tab = document.createElement('button');
-    tab.className = 'cat-tab';
+    tab.className = 'cat-item';
     tab.type = 'button';
     tab.dataset.target = secId;
-    if (cat.icon) {
-      const ic = document.createElement('span');
-      ic.className = 'tab-icon';
-      ic.textContent = cat.icon;
-      tab.appendChild(ic);
-    }
-    tab.appendChild(document.createTextNode(cat.name || ''));
+    const ic = document.createElement('span');
+    ic.className = 'cat-ic';
+    ic.textContent = cat.icon || '🍽️';
+    const lbl = document.createElement('span');
+    lbl.className = 'cat-lbl';
+    lbl.textContent = cat.name || '';
+    tab.append(ic, lbl);
     tab.addEventListener('click', () => {
-      document.getElementById(secId)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById(secId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     els.nav.appendChild(tab);
 
-    // Kategori bölümü
+    // İçerik bölümü
     const section = document.createElement('section');
     section.className = 'category';
     section.id = secId;
 
     const h2 = document.createElement('h2');
     h2.className = 'category-title';
-    if (cat.icon) {
-      const ic = document.createElement('span');
-      ic.className = 'cat-icon';
-      ic.textContent = cat.icon;
-      h2.appendChild(ic);
-    }
-    h2.appendChild(document.createTextNode(cat.name || ''));
+    const emoji = document.createElement('span');
+    emoji.className = 'cat-emoji';
+    emoji.textContent = cat.icon || '🍽️';
+    h2.append(emoji, document.createTextNode(cat.name || ''));
     section.appendChild(h2);
 
     const grid = document.createElement('div');
-    grid.className = 'items-grid';
-    cat.items.forEach((item) => grid.appendChild(buildCard(item, currency)));
+    grid.className = 'items';
+    cat.items.forEach((item) => grid.appendChild(buildCard(item, currency, cat.icon)));
     section.appendChild(grid);
 
     els.root.appendChild(section);
     sections.push({ id: secId, tab, section });
   });
 
-  els.navWrap.hidden = false;
-  els.footer.textContent = `${name} · Dijital Menü`;
+  els.footer.innerHTML = '';
+  const lf = document.createElement('span'); lf.className = 'leaf'; lf.textContent = '🌿';
+  els.footer.append(`${name} · Dijital Menü `, lf);
 
   setupScrollSpy(sections);
 }
 
-// Sticky nav yüksekliğini ölçüp scroll-margin için CSS değişkenine yaz.
-function syncNavHeight() {
-  const h = els.navWrap.offsetHeight || 60;
-  document.documentElement.style.setProperty('--nav-h', `${h}px`);
-  return h;
-}
-
-// Scroll-spy: görünen bölüme göre aktif sekmeyi vurgula.
+// Scroll-spy: görünen bölüme göre sol şeritte aktif kategoriyi vurgula.
 function setupScrollSpy(sections) {
-  // Önceki render'dan kalan observer/listener'ı temizle (birikmeyi önle).
   if (activeObserver) { activeObserver.disconnect(); activeObserver = null; }
   if (activeOnScroll) { window.removeEventListener('scroll', activeOnScroll); activeOnScroll = null; }
-
-  const navH = syncNavHeight();
-  const byId = new Map(sections.map((s) => [s.id, s]));
 
   function setActive(id) {
     sections.forEach((s) => {
@@ -201,41 +200,34 @@ function setupScrollSpy(sections) {
       s.tab.classList.toggle('active', on);
       if (on) {
         s.tab.setAttribute('aria-current', 'true');
-        // Aktif sekme yatay şeritte görünür kalsın.
-        s.tab.scrollIntoView({ block: 'nearest', inline: 'center' });
+        s.tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       } else {
         s.tab.removeAttribute('aria-current');
       }
     });
   }
 
-  // İlk sekmeyi baştan aktif yap.
   if (sections.length) setActive(sections[0].id);
-
   if (!('IntersectionObserver' in window)) return;
 
   activeObserver = new IntersectionObserver(
     (entries) => {
-      // Nav altındaki ince bantta görünen bölümü aktif kabul et.
       const visible = entries
         .filter((e) => e.isIntersecting)
         .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
       if (visible[0]) setActive(visible[0].target.id);
     },
-    { rootMargin: `-${navH}px 0px -72% 0px`, threshold: 0 }
+    { rootMargin: '-12% 0px -72% 0px', threshold: 0 }
   );
   sections.forEach((s) => activeObserver.observe(s.section));
 
-  // Sayfanın en altına gelince son sekmeyi aktif yap (kısa son bölüm sorunu).
+  // Sayfanın en altına gelince son kategoriyi aktif yap (kısa son bölüm sorunu).
   activeOnScroll = () => {
     if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
       setActive(sections[sections.length - 1].id);
     }
   };
   window.addEventListener('scroll', activeOnScroll, { passive: true });
-
-  // syncNavHeight adlı fonksiyon olduğundan tekrar eklemede no-op (birikmez).
-  window.addEventListener('resize', syncNavHeight, { passive: true });
 }
 
 // Gömülü (bootstrap) veriden anında render et — file:// çift tıklamada da çalışır.
@@ -276,8 +268,7 @@ async function load() {
     render(data); // taze veriyle üzerine yaz (deploy sonrası güncellik)
   } catch (err) {
     console.error('Menü tazeleme hatası:', err);
-    // Gömülü veriyle zaten render edildiyse sessizce devam et (file:// önizleme).
-    if (renderedFromEmbedded) return;
+    if (renderedFromEmbedded) return; // gömülü veriyle zaten çizildi (file:// önizleme)
     if (location.protocol === 'file:') {
       showError(
         'Menü görüntülenemedi. Yayınlanan adresten (örn. .pages.dev) açın ' +

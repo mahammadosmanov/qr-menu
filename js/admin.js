@@ -22,7 +22,7 @@ const dom = {
   loadBtn: $('loadBtn'), connStatus: $('connStatus'), connPanel: $('connPanel'),
   editor: $('editor'), topActions: $('topActions'),
   reloadBtn: $('reloadBtn'), saveBtn: $('saveBtn'),
-  restName: $('restNameInput'), currency: $('currencyInput'),
+  restName: $('restNameInput'), currency: $('currencyInput'), tagline: $('taglineInput'),
   cats: $('cats'), addCatBtn: $('addCatBtn'), toast: $('toast'),
 };
 
@@ -237,6 +237,7 @@ function showEditor() {
   dom.topActions.hidden = false;
   dom.restName.value = state.menu.restaurant.name || '';
   dom.currency.value = state.menu.restaurant.currency || 'TL';
+  dom.tagline.value = state.menu.restaurant.tagline || '';
   renderCats();
 }
 
@@ -472,6 +473,7 @@ function serializeMenu() {
     restaurant: {
       name: (m.restaurant.name || '').trim() || 'Kafe Adı',
       currency: (m.restaurant.currency || '').trim() || 'TL',
+      tagline: (m.restaurant.tagline || '').trim(),
     },
     categories: m.categories.map((c) => ({
       id: c.id,
@@ -584,6 +586,7 @@ dom.saveBtn.addEventListener('click', saveMenu);
 dom.addCatBtn.addEventListener('click', addCategory);
 dom.restName.addEventListener('input', (e) => { state.menu.restaurant.name = e.target.value; });
 dom.currency.addEventListener('input', (e) => { state.menu.restaurant.currency = e.target.value; });
+dom.tagline.addEventListener('input', (e) => { state.menu.restaurant.tagline = e.target.value; });
 
 // Yüklenmemiş görsel varken sayfadan çıkış uyarısı (geri alınamayan tek durum).
 window.addEventListener('beforeunload', (e) => {

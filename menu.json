@@ -1,8 +1,8 @@
 {
   "restaurant": {
-    "name": "Kafe Adı",
+    "name": "Ada Cafe",
     "currency": "TL",
-    "note": "restaurant.name alanını kendi kafe adınla değiştir."
+    "tagline": "Lezzet, huzur, keyif"
   },
   "categories": [
     {

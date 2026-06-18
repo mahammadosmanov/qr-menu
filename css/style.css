@@ -1,38 +1,60 @@
 /* ============================================================
-   QR Menü — ortak stiller
-   Palet ve fontlar tek yerden (custom property) değiştirilir.
+   Ada Cafe — QR Menü ortak stiller
+   Palet, fontlar ve ölçüler tek yerden (custom property) değişir.
    Müşteri menüsü (index.html) + admin editörü (admin.html)
    ============================================================ */
 
-:root {
-  /* Renkler — CLAUDE_DESIGN_BRIEF paletine sadık */
-  --bg:        #FFFBEB; /* sıcak kırık beyaz arka plan */
-  --surface:   #FFFFFF; /* kart yüzeyi */
-  --primary:   #F97316; /* turuncu — başlık/aksan/aktif sekme */
-  --primary-d: #EA580C; /* turuncu koyu — hover/aktif */
-  --accent:    #FACC15; /* sarı — vurgu, ince detay */
-  --price:     #16A34A; /* yeşil — fiyat rozeti */
-  --price-d:   #15803D; /* yeşil koyu */
-  --text:      #1C1917; /* koyu metin */
-  --muted:     #78716C; /* not / ikincil metin */
-  --border:    #F5E9C8; /* yumuşak ayraç */
+/* Self-host fontlar (CDN yok, aynı-origin statik dosya) */
+@font-face {
+  font-family: "Roboto";
+  src: url("../fonts/Roboto.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Dancing Script";
+  src: url("../fonts/DancingScript.ttf") format("truetype");
+  font-weight: 400 700;
+  font-display: swap;
+}
 
-  /* Tipografi — harici font dosyası şart değil; istenirse buradan değişir */
-  --font: "Nunito", "Poppins", "Segoe UI", system-ui, -apple-system,
-          "Helvetica Neue", Arial, sans-serif;
+:root {
+  /* Renkler */
+  --bg:        #FFFDF7; /* sayfa arka planı (görsel yüklenene kadar) */
+  --sheet:     #FFFDF6;
+  --surface:   #FFFFFF; /* kart yüzeyi */
+  --cream:     #FFF6E0;
+  --primary:   #E8732A; /* turuncu — marka, fiyat */
+  --primary-d: #D45F18;
+  --accent:    #F6B45A;
+  --green:     #6E9140; /* yeşil — sidebar aktif, ayraç */
+  --green-d:   #56742F;
+  --green-soft:#EAF0DC;
+  --price:     #16A34A; /* admin switch yeşili */
+  --price-d:   #15803D;
+  --text:      #2E3320; /* koyu zeytin metin */
+  --muted:     #837F6F;
+  --border:    #F0E6CC;
+
+  /* Tipografi — gövde Roboto, marka başlığı Pacifico (script) */
+  --font: "Roboto", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-script: "Dancing Script", "Brush Script MT", cursive;
+
+  /* Çiçek çerçevesinin içerik için bıraktığı güvenli kenar boşlukları */
+  --frame-top: 104px;
+  --frame-bottom: 84px;
+  --frame-side: 18px;
 
   /* Ölçüler */
-  --maxw: 960px;
+  --maxw: 780px;
   --radius: 16px;
-  --radius-sm: 10px;
-  --shadow: 0 1px 2px rgba(28, 25, 23, .04), 0 6px 18px rgba(28, 25, 23, .06);
-  --nav-h: 60px; /* sticky nav yüksekliği — JS güncelleyebilir */
+  --radius-sm: 12px;
+  --shadow: 0 2px 10px rgba(80, 60, 20, .06);
 }
 
 * { box-sizing: border-box; }
-
 html { -webkit-text-size-adjust: 100%; }
-
 body {
   margin: 0;
   font-family: var(--font);
@@ -42,240 +64,271 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 img { max-width: 100%; display: block; }
-
 button { font-family: inherit; }
 
 /* ============================================================
    MÜŞTERİ MENÜSÜ (index.html)
    ============================================================ */
 
-/* Header — yumuşak turuncu→sarı gradient */
+/* Sabit sulu boya çiçek çerçevesi — telefonda bg-phone, PC'de bg-hd */
+.bg-frame {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--bg);
+  background-image: url("../bg-phone.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* Çiçekler canlı/doygun kalsın (soluklaşmasın); okunabilirliği öndeki paneller sağlar */
+  filter: saturate(1.12) contrast(1.04);
+}
+
+.app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--frame-top) var(--frame-side) var(--frame-bottom);
+}
+
+/* Header — marka + slogan (okunabilir panel) */
 .site-header {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 130%);
-  /* Koyu metin: sarıya kayan gradient üzerinde AA kontrastını sağlar (brief: metni koyu tut). */
-  color: var(--text);
-  padding: 18px 16px 20px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 6px;
+  text-align: center;
+  padding: 8px 28px 14px;
+  background: rgba(255, 252, 243, .9);
+  border-radius: 26px;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  box-shadow: 0 4px 18px rgba(80, 60, 20, .16);
 }
-.header-inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.logo-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, .22);
-  flex: 0 0 auto;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-}
-.logo-box img { width: 100%; height: 100%; object-fit: cover; }
-.site-title {
+.brand {
   margin: 0;
-  font-size: clamp(1.45rem, 5vw, 2rem);
-  font-weight: 800;
-  letter-spacing: -.01em;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .3);
-}
-
-/* Sticky kategori navigasyonu */
-.cat-nav {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255, 251, 235, .92);
-  backdrop-filter: saturate(160%) blur(8px);
-  -webkit-backdrop-filter: saturate(160%) blur(8px);
-  border-bottom: 1px solid var(--border);
-}
-.cat-nav-inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 9px 12px;
-  scroll-behavior: smooth;
-}
-.cat-nav-inner::-webkit-scrollbar { display: none; }
-.cat-tab {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;            /* dokunma hedefi ≥44px */
-  padding: 8px 15px;
-  border: 1.5px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: .95rem;
+  font-family: var(--font-script);
   font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  letter-spacing: 0;
+  color: var(--primary);
+  font-size: clamp(3.2rem, 15vw, 4.6rem);
+  line-height: 1.15;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, .5);
 }
-.cat-tab:hover { border-color: var(--primary); }
-.cat-tab.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
+.tagline {
+  margin: 3px 0 0;
+  font-weight: 600;
+  color: var(--green-d);
+  font-size: clamp(.9rem, 3.4vw, 1.02rem);
+  letter-spacing: .01em;
 }
-.cat-tab .tab-icon { font-size: 1.05rem; line-height: 1; }
+.tagline .leaf { color: var(--green); opacity: .85; margin: 0 6px; }
 
-/* Menü gövdesi */
-.menu {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 8px 14px 40px;
-}
-
-.category {
-  scroll-margin-top: calc(var(--nav-h) + 8px); /* sticky nav altında kalmasın */
-  padding-top: 18px;
-}
-.category-title {
+/* MENÜ ayracı */
+.menu-divider {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 6px 2px 14px;
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--text);
+  justify-content: center;
+  gap: 10px;
+  margin: 16px 8px 10px;
 }
-.category-title .cat-icon { font-size: 1.4rem; line-height: 1; }
-.category-title::after {
+.menu-divider::before,
+.menu-divider::after {
   content: "";
-  flex: 1;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
+  height: 1px;
+  width: clamp(28px, 16vw, 90px);
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  opacity: .55;
+}
+.menu-divider .leaf { color: var(--green); font-size: 1.05rem; opacity: .85; }
+.menu-divider .menu-word {
+  font-weight: 800;
+  letter-spacing: .3em;
+  padding: 4px 14px 4px calc(14px + .3em);
+  color: var(--green-d);
+  font-size: 1.02rem;
+  background: rgba(255, 252, 243, .9);
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-/* Ürün grid'i: mobil 1, ≥640 2, ≥1024 3 sütun */
-.items-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+/* Gövde: sol dikey kategori şeridi + içerik */
+.menu-body {
+  display: flex;
   gap: 12px;
+  align-items: flex-start;
 }
-@media (min-width: 640px) {
-  .items-grid { grid-template-columns: repeat(2, 1fr); }
+.cat-rail {
+  flex: 0 0 84px;
+  position: sticky;
+  top: calc(var(--frame-top) - 8px);
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: calc(100vh - var(--frame-top));
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 6px;
+  background: rgba(255, 252, 243, .9);
+  border-radius: 20px;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  box-shadow: 0 4px 16px rgba(80, 60, 20, .16);
 }
-@media (min-width: 1024px) {
-  .items-grid { grid-template-columns: repeat(3, 1fr); }
+.cat-rail::-webkit-scrollbar { display: none; }
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 62px;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background .15s ease;
 }
+.cat-item .cat-ic {
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--green-soft);
+  font-size: 1.25rem;
+  transition: background .15s ease;
+}
+.cat-item .cat-lbl {
+  font-size: .72rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--green-d);
+  word-break: break-word;
+}
+.cat-item:hover .cat-ic { background: #DEE7CB; }
+.cat-item.active { background: var(--green); }
+.cat-item.active .cat-ic { background: rgba(255, 255, 255, .25); }
+.cat-item.active .cat-lbl { color: #fff; }
 
-/* Ürün kartı */
+.menu-content { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+.category { scroll-margin-top: var(--frame-top); }
+.category-title {
+  margin: 0 0 12px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 1.12rem;
+  color: var(--green-d);
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255, 252, 243, .92);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 10px rgba(80, 60, 20, .12);
+}
+.category-title .cat-emoji { font-size: 1.2rem; }
+
+.items { display: grid; grid-template-columns: 1fr; gap: 11px; }
+
 .item-card {
   display: flex;
-  align-items: stretch;
   gap: 12px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 12px 14px;
+  padding: 10px;
   transition: transform .12s ease, box-shadow .12s ease;
 }
 @media (hover: hover) {
-  .item-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(28, 25, 23, .05), 0 12px 26px rgba(28, 25, 23, .09);
-  }
+  .item-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(80, 55, 15, .12); }
 }
 .item-thumb {
   flex: 0 0 auto;
-  width: 76px;
-  height: 76px;
-  border-radius: var(--radius-sm);
-  object-fit: cover;
-  background: var(--border);
-  align-self: center;
+  width: 88px; height: 88px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #FBF1DA, #F0E7CB);
 }
-.item-main {
+.item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.item-thumb .ph { font-size: 2.1rem; opacity: .6; }
+.item-info {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
 }
-.item-text { min-width: 0; }
 .item-name {
   margin: 0;
-  font-size: 1.02rem;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 1.04rem;
   color: var(--text);
   overflow-wrap: anywhere;
 }
-.item-note {
-  margin: 2px 0 0;
-  font-size: .8rem;
-  color: var(--muted);
-  font-weight: 600;
-}
-.price-badge {
-  flex: 0 0 auto;
-  align-self: center;
-  background: var(--price);
-  color: #fff;
+.item-note { margin: 0; font-size: .82rem; color: var(--muted); }
+.price {
+  margin-top: 4px;
   font-weight: 800;
-  font-size: .92rem;
-  padding: 6px 11px;
-  border-radius: 999px;
-  white-space: nowrap;
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .12);
+  font-size: 1.08rem;
+  color: var(--primary);
 }
 
-/* Durum mesajları (yükleniyor / hata / boş) */
-.loading,
-.state-msg {
-  max-width: var(--maxw);
-  margin: 48px auto;
+/* Durum mesajları */
+.loading, .state-msg {
+  margin: 40px auto;
   padding: 0 24px;
   text-align: center;
   color: var(--muted);
   font-weight: 600;
 }
-.state-msg {
-  font-size: 1.05rem;
-}
+.state-msg { font-size: 1.02rem; }
 .state-msg .state-emoji { display: block; font-size: 2.4rem; margin-bottom: 8px; }
 .state-msg .retry-btn {
-  margin-top: 16px;
-  min-height: 44px;
-  padding: 0 20px;
-  border: none;
-  border-radius: 999px;
-  background: var(--primary);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
+  margin-top: 16px; min-height: 44px; padding: 0 20px;
+  border: none; border-radius: 999px;
+  background: var(--primary); color: #fff; font-weight: 700; cursor: pointer;
 }
 
 .site-footer {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 8px 16px 30px;
   text-align: center;
   color: var(--muted);
   font-size: .78rem;
+  padding: 16px 16px 4px;
+}
+.site-footer .leaf { color: var(--green); opacity: .7; }
+
+/* ---- Responsive: tablet ---- */
+@media (min-width: 560px) {
+  .items { grid-template-columns: repeat(2, 1fr); }
+}
+/* ---- Responsive: PC (bg-hd çerçevesi) ---- */
+@media (min-width: 760px) {
+  :root {
+    --frame-top: 198px;
+    --frame-bottom: 120px;
+    --frame-side: 104px;
+  }
+  .bg-frame { background-image: url("../bg-hd.jpg"); }
+  .app { max-width: 1080px; }
+  .cat-rail { flex-basis: 110px; top: calc(var(--frame-top) - 24px); }
+  .brand { font-size: clamp(3.6rem, 7vw, 5.2rem); }
+}
+@media (min-width: 1040px) {
+  .items { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ============================================================
    ADMIN EDİTÖRÜ (admin.html)
    ============================================================ */
 
-body.admin {
-  background: #FAFAF8;
-}
+body.admin { background: #FAFAF8; }
 .admin-header {
   position: sticky;
   top: 0;
@@ -346,7 +399,7 @@ body.admin {
 .field textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, .15);
+  box-shadow: 0 0 0 3px rgba(232, 115, 42, .15);
 }
 .field-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .field-row .field { flex: 1 1 140px; margin-bottom: 0; }
@@ -466,7 +519,7 @@ body.admin {
 .thumb-cell .thumb-box {
   width: 56px;
   height: 56px;
-  padding: 0;                 /* <button> reset */
+  padding: 0;
   font-family: inherit;
   border-radius: 8px;
   border: 1.5px dashed #D6D3CB;
@@ -482,14 +535,14 @@ body.admin {
 .thumb-cell .thumb-box:focus-visible {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, .25);
+  box-shadow: 0 0 0 3px rgba(232, 115, 42, .25);
 }
 .thumb-cell .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
 .thumb-cell .thumb-remove {
   display: block;
   width: 100%;
   margin-top: 3px;
-  min-height: 36px;           /* dokunulabilir hedef */
+  min-height: 36px;
   padding: 4px;
   font-size: .72rem;
   border: none;
