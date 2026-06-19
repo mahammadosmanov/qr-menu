@@ -225,6 +225,7 @@ function normalizeMenu(m) {
       if (typeof i.available !== 'boolean') i.available = true;
       if (i.image === undefined) i.image = null;
       if (i.note == null) i.note = '';
+      if (i.description == null) i.description = '';
     }
   }
   return m;
@@ -360,9 +361,15 @@ function buildItemRow(cat, ci, item, ii) {
     placeholder: 'Not (ör. Kişi Başı) — opsiyonel',
     oninput: (e) => { item.note = e.target.value; },
   });
+  const descIn = el('textarea', {
+    class: 'input desc-in', rows: '2', value: item.description || '',
+    placeholder: 'Açıklama / içindekiler (fiyatın üstünde görünür) — opsiyonel',
+    oninput: (e) => { item.description = e.target.value; },
+  });
   const fields = el('div', { class: 'item-fields' }, [
     el('div', { class: 'name-price' }, [nameIn, priceIn]),
     noteIn,
+    descIn,
   ]);
 
   const tools = el('div', { class: 'row-tools' }, [
@@ -400,7 +407,7 @@ function addCategory() {
 function addItem(ci) {
   const cat = state.menu.categories[ci];
   const id = uniqueId('urun');
-  cat.items.push({ id, name: '', price: 0, note: '', image: null, available: true, _auto: true });
+  cat.items.push({ id, name: '', price: 0, note: '', description: '', image: null, available: true, _auto: true });
   renderCats();
 }
 function moveItem(ci, ii, dir) {
@@ -484,6 +491,7 @@ function serializeMenu() {
         name: i.name || '',
         price: Number(i.price) || 0,
         note: i.note || '',
+        description: i.description || '',
         image: i.image || null,
         available: i.available !== false,
       })),

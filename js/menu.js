@@ -17,6 +17,35 @@ const els = {
 let activeObserver = null;
 let activeOnScroll = null;
 
+// Fotoğraf büyütme (lightbox) — bir kez kurulur.
+const lb = {
+  root: document.getElementById('lightbox'),
+  img: document.getElementById('lightboxImg'),
+  cap: document.getElementById('lightboxCap'),
+  close: document.getElementById('lightboxClose'),
+};
+function openLightbox(src, caption) {
+  if (!lb.root) return;
+  lb.img.src = src;
+  lb.img.alt = caption || '';
+  lb.cap.textContent = caption || '';
+  lb.root.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  if (!lb.root) return;
+  lb.root.hidden = true;
+  lb.img.removeAttribute('src');
+  document.body.style.overflow = '';
+}
+if (lb.root) {
+  lb.close.addEventListener('click', closeLightbox);
+  lb.root.addEventListener('click', (e) => { if (e.target === lb.root) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !lb.root.hidden) closeLightbox();
+  });
+}
+
 // Fiyatı biçimle: TL/₺ için "₺650", diğer birimlerde "650 USD".
 function formatPrice(price, currency) {
   const num = Number(price);
@@ -77,6 +106,19 @@ function buildCard(item, currency, catIcon) {
       thumb.appendChild(ph);
     });
     thumb.appendChild(img);
+    // Fotoğrafa tıklayınca/Enter ile büyüt (lightbox).
+    thumb.classList.add('zoomable');
+    thumb.setAttribute('role', 'button');
+    thumb.setAttribute('tabindex', '0');
+    thumb.setAttribute('aria-label', `${item.name || 'Ürün'} fotoğrafını büyüt`);
+    const openZoom = () => {
+      const current = thumb.querySelector('img');
+      if (current) openLightbox(current.src, item.name || '');
+    };
+    thumb.addEventListener('click', openZoom);
+    thumb.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openZoom(); }
+    });
   } else {
     const ph = document.createElement('span');
     ph.className = 'ph';
@@ -97,6 +139,14 @@ function buildCard(item, currency, catIcon) {
     note.className = 'item-note';
     note.textContent = item.note;
     info.appendChild(note);
+  }
+
+  // Açıklama (içindekiler) — fiyatın üstünde.
+  if (item.description) {
+    const desc = document.createElement('p');
+    desc.className = 'item-desc';
+    desc.textContent = item.description;
+    info.appendChild(desc);
   }
 
   const price = document.createElement('span');

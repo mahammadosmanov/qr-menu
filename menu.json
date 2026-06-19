@@ -10,7 +10,7 @@
       "name": "Kahvaltılar",
       "icon": "🍳",
       "items": [
-        { "id": "serpme-kahvalti", "name": "Serpme Kahvaltı", "price": 650, "note": "Kişi Başı", "image": null, "available": true },
+        { "id": "serpme-kahvalti", "name": "Serpme Kahvaltı", "price": 650, "note": "Kişi Başı", "description": "Peynir çeşitleri, zeytin, söğüş, reçel, tereyağı, bal, sıcak pişi ve sınırsız çay", "image": null, "available": true },
         { "id": "kahvalti-tabagi", "name": "Kahvaltı Tabağı", "price": 350, "note": "", "image": null, "available": true },
         { "id": "menemen", "name": "Menemen", "price": 225, "note": "", "image": null, "available": true },
         { "id": "kasarli-menemen", "name": "Kaşarlı Menemen", "price": 250, "note": "", "image": null, "available": true },
